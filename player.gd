@@ -107,30 +107,3 @@ func check_pickup():
                 if child is VisualInstance3D:
                     child.set_layer_mask_value(1, false) # Tắt layer chính
                     child.set_layer_mask_value(2, true)  # Bật layer phụ
-
-    if ray.is_colliding():
-        var target = ray.get_collider()
-        
-        if target and target.is_in_group("items"):
-            picked_item = target 
-            
-            picked_item.freeze = true
-            
-            # CỰC KỲ QUAN TRỌNG: 
-            # 1. Tắt va chạm để không bị hất tung
-            picked_item.collision_layer = 0
-            picked_item.collision_mask = 0
-            
-            # 2. Chuyển sang Layer mà Hands_cam đang nhìn (ví dụ Layer 2)
-            
-            var current_parent = picked_item.get_parent()
-            if current_parent:
-                current_parent.remove_child(picked_item)
-            
-            # THAY ĐỔI: Thêm vào hands_cam thay vì node hand cũ
-            hands_cam.add_child(picked_item)
-            
-            # Đưa về tâm của hands_cam và ép nhỏ lại
-            picked_item.position = Vector3.ZERO
-            picked_item.rotation = Vector3.ZERO
-            picked_item.scale = Vector3(0.03, 0.03, 0.03)
