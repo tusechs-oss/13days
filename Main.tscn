@@ -54,7 +54,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_wvikx")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fos0i"]
-size = Vector3(15, 16, 72)
+size = Vector3(15, 17.532715, 72)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3dxm6"]
 size = Vector3(12, 196, 5)
@@ -130,7 +130,7 @@ contact_monitor = true
 mesh = SubResource("ArrayMesh_xtgk3")
 
 [node name="end" type="CollisionShape3D" parent="Broom/Object_0" unique_id=109739227]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0000076, -25.499987, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0000076, -26.266342, -0.5)
 shape = SubResource("BoxShape3D_fos0i")
 
 [node name="start" type="CollisionShape3D" parent="Broom/Object_0" unique_id=720895545]
