@@ -63,7 +63,6 @@ func _input(event):
 			check_pickup()
 			
 func check_pickup():
-<<<<<<< Updated upstream
 	if ray.is_colliding():
 		var target = ray.get_collider()
 		
@@ -90,7 +89,7 @@ func check_pickup():
 				if child is VisualInstance3D:
 					child.set_layer_mask_value(1, false) # Tắt layer chính
 					child.set_layer_mask_value(2, true)  # Bật layer phụ
-=======
+
 	if ray.is_colliding():
 		var target = ray.get_collider()
 		
@@ -117,4 +116,3 @@ func check_pickup():
 			picked_item.position = Vector3.ZERO
 			picked_item.rotation = Vector3.ZERO
 			picked_item.scale = Vector3(0.03, 0.03, 0.03)
->>>>>>> Stashed changes
