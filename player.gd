@@ -13,79 +13,108 @@ var target_rot_y = 0.0
 var target_rot_x = 0.0
 
 func _ready():
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-    # Khởi tạo mốc bằng giá trị hiện tại để không bị khựng lúc đầu
-    target_rot_y = rotation.y
-    target_rot_x = $head/Camera3D.rotation.x
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Khởi tạo mốc bằng giá trị hiện tại để không bị khựng lúc đầu
+	target_rot_y = rotation.y
+	target_rot_x = $head/Camera3D.rotation.x
 
 func xoay_chuot(event):
-    if event is InputEventMouseMotion:
-        # THAY ĐỔI: Chỉ cập nhật cái mốc nhìn, chưa xoay thật
-        target_rot_y -= event.relative.x * sens
-        target_rot_x -= event.relative.y * sens
-        target_rot_x = clamp(target_rot_x, deg_to_rad(-85), deg_to_rad(85))
+	if event is InputEventMouseMotion:
+		# THAY ĐỔI: Chỉ cập nhật cái mốc nhìn, chưa xoay thật
+		target_rot_y -= event.relative.x * sens
+		target_rot_x -= event.relative.y * sens
+		target_rot_x = clamp(target_rot_x, deg_to_rad(-85), deg_to_rad(85))
 
 func _process(delta):
-    hands_cam.global_transform = main_camera.global_transform
-    # THAY ĐỔI: Đây là chỗ làm mượt bằng "dây chun" (lerp)
-    rotation.y = lerp_angle(rotation.y, target_rot_y, smooth_speed * delta)
-    $head/Camera3D.rotation.x = lerp_angle($head/Camera3D.rotation.x, target_rot_x, smooth_speed * delta)
+	hands_cam.global_transform = main_camera.global_transform
+	# THAY ĐỔI: Đây là chỗ làm mượt bằng "dây chun" (lerp)
+	rotation.y = lerp_angle(rotation.y, target_rot_y, smooth_speed * delta)
+	$head/Camera3D.rotation.x = lerp_angle($head/Camera3D.rotation.x, target_rot_x, smooth_speed * delta)
 
 func _physics_process(delta: float) -> void:
-    # Trọng lực
-    if not is_on_floor():
-        velocity += get_gravity() * delta
-    else:
-        velocity.y = 0
+	# Trọng lực
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	else:
+		velocity.y = 0
 
-    # ĐÃ BỎ PHẦN NHẢY (JUMP) theo ý bạn
+	# ĐÃ BỎ PHẦN NHẢY (JUMP) theo ý bạn
 
-    var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-    var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-    
-    if direction:
-        velocity.x = direction.x * SPEED
-        velocity.z = direction.z * SPEED
-    else:
-        # Cách dừng lại "lười" nhưng mượt
-        velocity.x = move_toward(velocity.x, 0, SPEED)
-        velocity.z = move_toward(velocity.z, 0, SPEED)
+	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+	else:
+		# Cách dừng lại "lười" nhưng mượt
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
 
-    move_and_slide()
+	move_and_slide()
 
 func _unhandled_input(event):
-    xoay_chuot(event)
+	xoay_chuot(event)
 
 func _input(event):
-    # Nhấn chuột trái để nhặt hoặc ném
-    if event.is_action_pressed("ui_accept") or (event is InputEventMouseButton and event.pressed):
-        if picked_item == null:
-            check_pickup()
-            
+	# Nhấn chuột trái để nhặt hoặc ném
+	if event.is_action_pressed("ui_accept") or (event is InputEventMouseButton and event.pressed):
+		if picked_item == null:
+			check_pickup()
+			
 func check_pickup():
-    if ray.is_colliding():
-        var target = ray.get_collider()
-        
-        if target and target.is_in_group("items"):
-            picked_item = target 
-            
-            picked_item.freeze = true
-            
-            # CỰC KỲ QUAN TRỌNG: 
-            # 1. Tắt va chạm để không bị hất tung
-            picked_item.collision_layer = 0
-            picked_item.collision_mask = 0
-            
-            # 2. Chuyển sang Layer mà Hands_cam đang nhìn (ví dụ Layer 2)
-            
-            var current_parent = picked_item.get_parent()
-            if current_parent:
-                current_parent.remove_child(picked_item)
-            
-            # THAY ĐỔI: Thêm vào hands_cam thay vì node hand cũ
-            hands_cam.add_child(picked_item)
-            
-            # Đưa về tâm của hands_cam và ép nhỏ lại
-            picked_item.position = Vector3.
-            picked_item.rotation = Vector3
-            picked_item.scale = Vector3(0.03, 0.03, 0.03)
+<<<<<<< Updated upstream
+	if ray.is_colliding():
+		var target = ray.get_collider()
+		
+		if target and target.is_in_group("items"):
+			picked_item = target 
+			
+			# 1. Đóng băng vật lý và tắt va chạm ngay lập tức
+			picked_item.freeze = true
+			picked_item.collision_layer = 0
+			picked_item.collision_mask = 0
+			
+			# 2. Dùng reparent để đưa vào 'hand' (node con của hands_cam)
+			# Dùng lệnh này nhanh và an toàn hơn remove_child/add_child
+			picked_item.reparent(hand)
+			
+			# 3. Đưa về tâm của node 'hand'
+			# Tú chỉ cần để 2 dòng này là ra ngoài Inspector xoay node 'hand' thoải mái
+			picked_item.position = Vector3.ZERO
+			picked_item.rotation = Vector3.ZERO
+			picked_item.scale = Vector3(0.03, 0.03, 0.03)
+
+			# 4. Chuyển Layer hiển thị (Gộp 2 vòng lặp của Tú thành 1 cho gọn)
+			for child in picked_item.get_children():
+				if child is VisualInstance3D:
+					child.set_layer_mask_value(1, false) # Tắt layer chính
+					child.set_layer_mask_value(2, true)  # Bật layer phụ
+=======
+	if ray.is_colliding():
+		var target = ray.get_collider()
+		
+		if target and target.is_in_group("items"):
+			picked_item = target 
+			
+			picked_item.freeze = true
+			
+			# CỰC KỲ QUAN TRỌNG: 
+			# 1. Tắt va chạm để không bị hất tung
+			picked_item.collision_layer = 0
+			picked_item.collision_mask = 0
+			
+			# 2. Chuyển sang Layer mà Hands_cam đang nhìn (ví dụ Layer 2)
+			
+			var current_parent = picked_item.get_parent()
+			if current_parent:
+				current_parent.remove_child(picked_item)
+			
+			# THAY ĐỔI: Thêm vào hands_cam thay vì node hand cũ
+			hands_cam.add_child(picked_item)
+			
+			# Đưa về tâm của hands_cam và ép nhỏ lại
+			picked_item.position = Vector3.ZERO
+			picked_item.rotation = Vector3.ZERO
+			picked_item.scale = Vector3(0.03, 0.03, 0.03)
+>>>>>>> Stashed changes
