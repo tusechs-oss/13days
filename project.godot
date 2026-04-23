@@ -21,13 +21,9 @@ run/main_scene="uid://croeoss4do7fh"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
-[autoload]
-
-TerrainRebuildCoordinator="*uid://brautlco0ivx3"
-
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/PolyHavenImport/plugin.cfg", "res://addons/terrainy/plugin.cfg")
+enabled=PackedStringArray("res://addons/PolyHavenImport/plugin.cfg")
 
 [input]
 

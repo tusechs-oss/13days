@@ -78,10 +78,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28896618, 1.2781429, -0.07
 cull_mask = 1048573
 
 [node name="Hands" type="Node3D" parent="Player/head/Camera3D" unique_id=35472041]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21, -0.764, -1.572)
 
 [node name="RayCast3D" type="RayCast3D" parent="Player/head/Camera3D" unique_id=1318950900]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08460766, -0.8956456, -0.52342635)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08460766, -0.8956456, -1.0182941)
 target_position = Vector3(-0.289, 0, -3)
 collision_mask = 2
 
@@ -136,3 +136,6 @@ shape = SubResource("BoxShape3D_fos0i")
 [node name="start" type="CollisionShape3D" parent="Broom/Object_0" unique_id=720895545]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5000076, 83.5, 7.6293945e-06)
 shape = SubResource("BoxShape3D_3dxm6")
+
+[node name="GripPoint" type="Marker3D" parent="Broom/Object_0" unique_id=387798426]
+transform = Transform3D(1.0000001, 0, 0, 0, 1.0000001, 2.2204463e-16, 0, -2.2204463e-16, 1.0000001, 0, 3.465, 0.06)
